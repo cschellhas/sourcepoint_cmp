@@ -1,3 +1,5 @@
+[![pub package](https://img.shields.io/pub/v/sourcepoint_cmp.svg)](https://pub.dartlang.org/packages/sourcepoint_cmp)
+
 # sourcepoint_cmp
 
 Flutter Plugin for integrating Sourcepoint CMP

@@ -1,8 +1,7 @@
 name: sourcepoint_cmp
 description: Simple plugin to use the Sourcepoint CMP with Flutter.
 version: 0.0.1
-author: Christoph Schellhas
-homepage:
+homepage: https://github.com/cschellhas/sourcepoint_cmp
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
