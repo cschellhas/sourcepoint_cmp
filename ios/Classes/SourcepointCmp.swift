@@ -63,8 +63,6 @@ class SourcepointCmp : SwiftSourcepointCmpPlugin{
 
 extension SourcepointCmp: GDPRConsentDelegate {
         func gdprConsentUIWillShow() {
-            //present(cvc, animated: true, completion: nil)
-            //container.addSubview(cvc)
             UIApplication.shared.keyWindow?.rootViewController?.present(cvc, animated: true, completion: nil)
         }
 

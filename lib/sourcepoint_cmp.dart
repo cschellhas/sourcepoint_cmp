@@ -1,17 +1,28 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class SourcepointCmp {
+  /// The method channel used to interact with the native platform.
   static const MethodChannel _channel = const MethodChannel('sourcepoint_cmp');
+
+  /// Account ID from your Sourcepoint Account
   final int accountId;
+
+  /// Id of your Property
   final int propertyId;
+
+  /// Name of your Property
   final String propertyName;
+
+  /// Privacy Manager id
   final String pmId;
+
+  /// called after an action is taken by the user and the consent info is returned by SourcePoint's endpoints
   final void Function() onConsentReady;
+
+  /// called on Sourcepoint errors
   final void Function(String errorMessage) onError;
-  var margins = [0, 0, 0, 0];
 
   SourcepointCmp(
       {this.accountId,
@@ -23,11 +34,7 @@ class SourcepointCmp {
     _channel.setMethodCallHandler(_handleEvent);
   }
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-
+  /// Handles returned events
   Future<dynamic> _handleEvent(MethodCall call) {
     switch (call.method) {
       case 'onConsentReady':
@@ -41,7 +48,7 @@ class SourcepointCmp {
     return null;
   }
 
-  /// Load beforehand before displaying.
+  /// Load CMP Message, only for new Users
   Future<void> load() async {
     await _channel.invokeMethod('load', <String, dynamic>{
       'accountId': accountId,
@@ -51,6 +58,7 @@ class SourcepointCmp {
     });
   }
 
+  /// Show Privacy Manger
   Future<void> showPM() async {
     try {
       print('zeige cmp');
@@ -60,15 +68,6 @@ class SourcepointCmp {
         'propertyName': propertyName,
         'pmId': pmId
       });
-    } on PlatformException catch (e) {
-      print(e);
-    }
-  }
-
-  void showCmp() {
-    try {
-      print('zeige cmp');
-      _channel.invokeMethod('showCMP');
     } on PlatformException catch (e) {
       print(e);
     }

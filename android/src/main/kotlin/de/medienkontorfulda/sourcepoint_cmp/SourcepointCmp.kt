@@ -58,10 +58,12 @@ class SourcepointCmp(registrar: PluginRegistry.Registrar, private val channel: M
                     for (specialFeatureId in consent.specialFeatures) {
                         Log.i(TAG, "The specialFeature $specialFeatureId was accepted.")
                     }
+                    channel.invokeMethod("onConsentReady", null)
                 }
                 .setOnError { error ->
                     Log.e(TAG, "Something went wrong: ", error)
                     Log.i(TAG, "ConsentLibErrorMessage: " + error.consentLibErrorMessage)
+                    channel.invokeMethod("onError", error.consentLibErrorMessage)
                 }
                 .build()
     }
