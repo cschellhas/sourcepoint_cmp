@@ -2,6 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import 'action_type.dart';
+import 'gdpr_user_consent.dart';
+
+export 'package:sourcepoint_cmp/gdpr_user_consent.dart';
+export 'package:sourcepoint_cmp/action_type.dart';
+
 class SourcepointCmp {
   /// The method channel used to interact with the native platform.
   static const MethodChannel _channel = const MethodChannel('sourcepoint_cmp');
@@ -19,26 +25,55 @@ class SourcepointCmp {
   final String pmId;
 
   /// called after an action is taken by the user and the consent info is returned by SourcePoint's endpoints
-  final void Function() onConsentReady;
+  final void Function(GDPRUserConsent result) onConsentReady;
 
   /// called on Sourcepoint errors
   final void Function(String errorMessage) onError;
 
-  SourcepointCmp(
-      {this.accountId,
-      this.propertyId,
-      this.propertyName,
-      this.pmId,
-      this.onConsentReady,
-      this.onError}) {
+  /// called when the Dialog message is about to be shown
+  final void Function() onConsentUIReady;
+
+  /// called when the Dialog message is about to disappear
+  final void Function() onConsentUIFinished;
+
+  final void Function(ActionType actionType) onAction;
+
+  SourcepointCmp({
+    this.accountId,
+    this.propertyId,
+    this.propertyName,
+    this.pmId,
+    this.onConsentUIReady,
+    this.onConsentUIFinished,
+    this.onConsentReady,
+    this.onError,
+    this.onAction
+  }) {
     _channel.setMethodCallHandler(_handleEvent);
   }
 
   /// Handles returned events
   Future<dynamic> _handleEvent(MethodCall call) {
     switch (call.method) {
+      case 'onConsentUIReady':
+        this.onConsentUIReady();
+        break;
+      case 'onConsentUIFinished':
+        this.onConsentUIFinished();
+        break;
+      case 'onAction':
+        final code = int.parse(call.arguments['actionType']);
+        this.onAction(actionTypeFromCode(code));
+        break;
       case 'onConsentReady':
-        this.onConsentReady();
+        GDPRUserConsent consent = GDPRUserConsent(
+          consentString: call.arguments['consentString'],
+          acceptedVendors: _castDynamicList(call.arguments['acceptedVendors']),
+          acceptedCategories: _castDynamicList(call.arguments['acceptedCategories']),
+          legIntCategories: _castDynamicList(call.arguments['legIntCategories']),
+          specialFeatures: _castDynamicList(call.arguments['specialFeatures']),
+        );
+        this.onConsentReady(consent);
         break;
       case 'onError':
         var debugDescription = call.arguments['debugDescription'] as String;
@@ -46,6 +81,12 @@ class SourcepointCmp {
         break;
     }
     return null;
+  }
+
+  List<String> _castDynamicList(List<dynamic> list) {
+    if (list == null) return [];
+
+    return List<String>.from(list.map((value) => value as String));
   }
 
   /// Load CMP Message, only for new Users

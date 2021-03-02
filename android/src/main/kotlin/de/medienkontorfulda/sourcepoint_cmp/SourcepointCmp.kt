@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import com.sourcepoint.gdpr_cmplibrary.ActionTypes
 import com.sourcepoint.gdpr_cmplibrary.GDPRConsentLib
 import com.sourcepoint.gdpr_cmplibrary.NativeMessage
 import com.sourcepoint.gdpr_cmplibrary.NativeMessageAttrs
@@ -27,7 +28,7 @@ class SourcepointCmp(registrar: PluginRegistry.Registrar, private val channel: M
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "load" -> load(call, result)
-            "showPM" -> showPM(call,result)
+            "showPM" -> showPM(call, result)
             else -> result.notImplemented()
         }
     }
@@ -37,14 +38,22 @@ class SourcepointCmp(registrar: PluginRegistry.Registrar, private val channel: M
                 .setOnConsentUIReady { view ->
                     showView(view)
                     Log.i(TAG, "onConsentUIReady")
+                    channel.invokeMethod("onConsentUIReady", null)
                 }
                 .setOnConsentUIFinished { view ->
                     removeView(view)
                     Log.i(TAG, "onConsentUIFinished")
+                    channel.invokeMethod("onConsentUIFinished", null)
+                }
+                .setOnAction { actionTypes: ActionTypes ->
+                    Log.i(TAG, actionTypes.code.toString())
+                    channel.invokeMethod("onAction", hashMapOf<String, Int>(
+                            "actionType" to actionTypes.code
+                    ))
                 }
                 .setOnConsentReady { consent ->
                     Log.i(TAG, "onConsentReady")
-                    Log.i(TAG, "consentString: " + consent.consentString)
+                    /*Log.i(TAG, "consentString: " + consent.consentString)
                     Log.i(TAG, consent.TCData.toString())
                     for (vendorId in consent.acceptedVendors) {
                         Log.i(TAG, "The vendor $vendorId was accepted.")
@@ -57,8 +66,16 @@ class SourcepointCmp(registrar: PluginRegistry.Registrar, private val channel: M
                     }
                     for (specialFeatureId in consent.specialFeatures) {
                         Log.i(TAG, "The specialFeature $specialFeatureId was accepted.")
-                    }
-                    channel.invokeMethod("onConsentReady", null)
+                    }*/
+                    val map: HashMap<String, Any> = hashMapOf<String, Any>(
+                            "consentString" to consent.consentString,
+                            "acceptedVendors" to consent.acceptedVendors,
+                            "acceptedCategories" to consent.acceptedCategories,
+                            "legIntCategories" to consent.legIntCategories,
+                            "specialFeatures" to consent.specialFeatures
+                    )
+                    // consent.toJsonObject().toString()
+                    channel.invokeMethod("onConsentReady", map)
                 }
                 .setOnError { error ->
                     Log.e(TAG, "Something went wrong: ", error)
