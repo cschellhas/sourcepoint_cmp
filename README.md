@@ -23,7 +23,16 @@ import 'package:sourcepoint_cmp/sourcepoint_cmp.dart';
         propertyId: 7639,
         propertyName: "tcfv2.mobile.webview",
         pmId: "122058",
-        onConsentReady: () {
+        onConsentUIReady: () {
+          debugPrint('onConsentUIReady');
+        },
+        onConsentUIFinished: () {
+          debugPrint('onConsentUIFinished');
+        },
+        onAction: (ActionType action) {
+          print('onAction(${action.toString()})');
+        },
+        onConsentReady: ({GDPRUserConsent consent}) {
           print('consentReady');
         },
         onError: (errorCode) {
