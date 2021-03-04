@@ -25,7 +25,7 @@ class SourcepointCmp {
   final String pmId;
 
   /// called after an action is taken by the user and the consent info is returned by SourcePoint's endpoints
-  final void Function(GDPRUserConsent result)? onConsentReady;
+  final void Function({GDPRUserConsent consent})? onConsentReady;
 
   /// called on Sourcepoint errors
   final void Function(String? errorMessage)? onError;
@@ -74,7 +74,7 @@ class SourcepointCmp {
           legIntCategories: _castDynamicList(call.arguments['legIntCategories']),
           specialFeatures: _castDynamicList(call.arguments['specialFeatures']),
         );
-        this.onConsentReady!(consent);
+        this.onConsentReady!(consent: consent);
         break;
       case 'onError':
         var debugDescription = call.arguments['debugDescription'] as String?;
