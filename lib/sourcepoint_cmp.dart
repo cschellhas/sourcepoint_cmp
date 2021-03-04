@@ -36,7 +36,7 @@ class SourcepointCmp {
   /// called when the Dialog message is about to disappear
   final void Function()? onConsentUIFinished;
 
-  final void Function(ActionType actionType)? onAction;
+  final void Function(ActionType? actionType)? onAction;
 
   SourcepointCmp({
     required this.accountId,

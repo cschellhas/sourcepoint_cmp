@@ -73,8 +73,11 @@ extension SourcepointCmp: GDPRConsentDelegate {
         }
     
         func onAction(_ action: GDPRAction) {
-            print("actionId: \(action.id!)")
-            let dict: [String: String] = ["actionType": action.id!]
+            var dict: [String: String] = [:]
+            if (action.id != nil) {
+                print("actionId: \(action.id!)")
+                dict["actionType"] = action.id
+            }
             channel.invokeMethod("onAction", arguments: dict)
         }
 

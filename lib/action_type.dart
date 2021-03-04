@@ -7,7 +7,9 @@ enum ActionType {
   PM_DISMISS
 }
 
-ActionType actionTypeFromCode(int code) {
+ActionType? actionTypeFromCode(int? code) {
+  if (code == null) return null;
+
   switch (code) {
     case 12: return ActionType.SHOW_OPTIONS;
     case 13: return ActionType.REJECT_ALL;
