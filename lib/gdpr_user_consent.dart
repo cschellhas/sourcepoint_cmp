@@ -8,13 +8,13 @@ class GDPRUserConsent {
     this.specialFeatures
   });
 
-  final String consentString;
+  final String? consentString;
 
-  final List<String> acceptedVendors;
+  final List<String>? acceptedVendors;
 
-  final List<String> acceptedCategories;
+  final List<String>? acceptedCategories;
 
-  final List<String> legIntCategories;
+  final List<String>? legIntCategories;
 
-  final List<String> specialFeatures;
+  final List<String>? specialFeatures;
 }

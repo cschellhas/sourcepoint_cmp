@@ -15,7 +15,7 @@ ActionType actionTypeFromCode(int code) {
     case 15: return ActionType.MSG_CANCEL;
     case 1: return ActionType.SAVE_AND_EXIT;
     case 2: return ActionType.PM_DISMISS;
-
-    throw UnsupportedError('Unknown actionCode $code');
   }
+
+  throw UnsupportedError('Unknown actionCode $code');
 }
