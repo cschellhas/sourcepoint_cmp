@@ -24,10 +24,13 @@ class _MyAppState extends State<MyApp> {
         propertyName: "tcfv2.mobile.webview",
         pmId: "122058",
         onConsentReady: (GDPRUserConsent result) {
-          print('Consent action is taken and returned to Sourcepoint');
+          debugPrint('Consent action is taken and returned to Sourcepoint');
+        },
+        onAction: (ActionType action) {
+          debugPrint('onAction(${action.toString()}) called');
         },
         onError: (errorCode) {
-          print('consentError: errorCode:$errorCode');
+          debugPrint('consentError: errorCode:$errorCode');
         });
 
     //Show on Start

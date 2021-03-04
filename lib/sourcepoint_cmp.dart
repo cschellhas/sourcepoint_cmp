@@ -25,45 +25,46 @@ class SourcepointCmp {
   final String pmId;
 
   /// called after an action is taken by the user and the consent info is returned by SourcePoint's endpoints
-  final void Function(GDPRUserConsent result) onConsentReady;
+  final void Function(GDPRUserConsent result)? onConsentReady;
 
   /// called on Sourcepoint errors
-  final void Function(String errorMessage) onError;
+  final void Function(String? errorMessage)? onError;
 
   /// called when the Dialog message is about to be shown
-  final void Function() onConsentUIReady;
+  final void Function()? onConsentUIReady;
 
   /// called when the Dialog message is about to disappear
-  final void Function() onConsentUIFinished;
+  final void Function()? onConsentUIFinished;
 
-  final void Function(ActionType actionType) onAction;
+  final void Function(ActionType actionType)? onAction;
 
   SourcepointCmp({
-    this.accountId,
-    this.propertyId,
-    this.propertyName,
-    this.pmId,
+    required this.accountId,
+    required this.propertyId,
+    required this.propertyName,
+    required this.pmId,
     this.onConsentUIReady,
     this.onConsentUIFinished,
     this.onConsentReady,
     this.onError,
     this.onAction
   }) {
-    _channel.setMethodCallHandler(_handleEvent);
+    _channel.setMethodCallHandler(_handleEvent as Future<dynamic> Function(MethodCall)?);
   }
 
   /// Handles returned events
-  Future<dynamic> _handleEvent(MethodCall call) {
+  Future<dynamic>? _handleEvent(MethodCall call) {
     switch (call.method) {
       case 'onConsentUIReady':
-        this.onConsentUIReady();
+        this.onConsentUIReady!();
         break;
       case 'onConsentUIFinished':
-        this.onConsentUIFinished();
+        this.onConsentUIFinished!();
         break;
       case 'onAction':
-        final code = int.parse(call.arguments['actionType']);
-        this.onAction(actionTypeFromCode(code));
+        final int code = call.arguments['actionType'];
+        final actionType = actionTypeFromCode(code);
+        this.onAction!(actionType);
         break;
       case 'onConsentReady':
         GDPRUserConsent consent = GDPRUserConsent(
@@ -73,17 +74,17 @@ class SourcepointCmp {
           legIntCategories: _castDynamicList(call.arguments['legIntCategories']),
           specialFeatures: _castDynamicList(call.arguments['specialFeatures']),
         );
-        this.onConsentReady(consent);
+        this.onConsentReady!(consent);
         break;
       case 'onError':
-        var debugDescription = call.arguments['debugDescription'] as String;
-        this.onError(debugDescription);
+        var debugDescription = call.arguments['debugDescription'] as String?;
+        this.onError!(debugDescription);
         break;
     }
     return null;
   }
 
-  List<String> _castDynamicList(List<dynamic> list) {
+  List<String> _castDynamicList(List<dynamic>? list) {
     if (list == null) return [];
 
     return List<String>.from(list.map((value) => value as String));

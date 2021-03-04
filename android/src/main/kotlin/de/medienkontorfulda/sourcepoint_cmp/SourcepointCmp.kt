@@ -37,36 +37,44 @@ class SourcepointCmp(registrar: PluginRegistry.Registrar, private val channel: M
         return GDPRConsentLib.newBuilder(accountId, propertyName, propertyId, pmId, this.context)
                 .setOnConsentUIReady { view ->
                     showView(view)
-                    Log.i(TAG, "onConsentUIReady")
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "onConsentUIReady")
+                    }
                     channel.invokeMethod("onConsentUIReady", null)
                 }
                 .setOnConsentUIFinished { view ->
                     removeView(view)
-                    Log.i(TAG, "onConsentUIFinished")
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "onConsentUIFinished")
+                    }
                     channel.invokeMethod("onConsentUIFinished", null)
                 }
                 .setOnAction { actionTypes: ActionTypes ->
-                    Log.i(TAG, actionTypes.code.toString())
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, actionTypes.code.toString())
+                    }
                     channel.invokeMethod("onAction", hashMapOf<String, Int>(
                             "actionType" to actionTypes.code
                     ))
                 }
                 .setOnConsentReady { consent ->
-                    Log.i(TAG, "onConsentReady")
-                    /*Log.i(TAG, "consentString: " + consent.consentString)
-                    Log.i(TAG, consent.TCData.toString())
-                    for (vendorId in consent.acceptedVendors) {
-                        Log.i(TAG, "The vendor $vendorId was accepted.")
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "onConsentReady")
+                        Log.i(TAG, "consentString: " + consent.consentString)
+                        Log.i(TAG, consent.TCData.toString())
+                        for (vendorId in consent.acceptedVendors) {
+                            Log.i(TAG, "The vendor $vendorId was accepted.")
+                        }
+                        for (purposeId in consent.acceptedCategories) {
+                            Log.i(TAG, "The category $purposeId was accepted.")
+                        }
+                        for (purposeId in consent.legIntCategories) {
+                            Log.i(TAG, "The legIntCategory $purposeId was accepted.")
+                        }
+                        for (specialFeatureId in consent.specialFeatures) {
+                            Log.i(TAG, "The specialFeature $specialFeatureId was accepted.")
+                        }
                     }
-                    for (purposeId in consent.acceptedCategories) {
-                        Log.i(TAG, "The category $purposeId was accepted.")
-                    }
-                    for (purposeId in consent.legIntCategories) {
-                        Log.i(TAG, "The legIntCategory $purposeId was accepted.")
-                    }
-                    for (specialFeatureId in consent.specialFeatures) {
-                        Log.i(TAG, "The specialFeature $specialFeatureId was accepted.")
-                    }*/
                     val map: HashMap<String, Any> = hashMapOf<String, Any>(
                             "consentString" to consent.consentString,
                             "acceptedVendors" to consent.acceptedVendors,
