@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:sourcepoint_cmp/sourcepoint_cmp.dart';
 
 void main() {
@@ -25,11 +23,21 @@ class _MyAppState extends State<MyApp> {
         propertyId: 7639,
         propertyName: "tcfv2.mobile.webview",
         pmId: "122058",
-        onConsentReady: () {
-          print('Consent action is taken and returned to Sourcepoint');
+        onConsentUIReady: () {
+          debugPrint('onConsentUIReady');
+        },
+        onConsentUIFinished: () {
+          debugPrint('onConsentUIFinished');
+        },
+        onConsentReady: ({GDPRUserConsent consent}) {
+          debugPrint('Consent string: ${consent.consentString}');
+          debugPrint('Consent action is taken and returned to Sourcepoint');
+        },
+        onAction: (ActionType action) {
+          debugPrint('onAction(${action.toString()})');
         },
         onError: (errorCode) {
-          print('consentError: errorCode:$errorCode');
+          debugPrint('consentError: errorCode:$errorCode');
         });
 
     //Show on Start

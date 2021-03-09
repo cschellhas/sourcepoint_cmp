@@ -64,20 +64,38 @@ class SourcepointCmp : SwiftSourcepointCmpPlugin{
 extension SourcepointCmp: GDPRConsentDelegate {
         func gdprConsentUIWillShow() {
             UIApplication.shared.keyWindow?.rootViewController?.present(cvc, animated: true, completion: nil)
+            channel.invokeMethod("onConsentUIReady", arguments: nil)
         }
 
         func consentUIDidDisappear() {
             UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+            channel.invokeMethod("onConsentUIFinished", arguments: nil)
+        }
+    
+        func onAction(_ action: GDPRAction) {
+            var dict: [String: String] = [:]
+            if (action.id != nil) {
+                print("actionId: \(action.id!)")
+                dict["actionType"] = action.id
+            }
+            channel.invokeMethod("onAction", arguments: dict)
         }
 
         func onConsentReady(gdprUUID: GDPRUUID, userConsent: GDPRUserConsent) {
             print("ConsentUUID: \(gdprUUID)")
+            print("Consent String (euconsent): \(userConsent.euconsent)")
             userConsent.acceptedVendors.forEach { vendorId in print("Vendor: \(vendorId)") }
             userConsent.acceptedCategories.forEach { purposeId in print("Purpose: \(purposeId)") }
 
             // IAB Related Data
             print(UserDefaults.standard.dictionaryWithValues(forKeys: userConsent.tcfData.dictionaryValue?.keys.sorted() ?? []))
-            channel.invokeMethod("onConsentReady", arguments: nil)
+            var dict: [String: Any] = [:]
+            dict["consentString"] = userConsent.euconsent
+            dict["acceptedVendors"] = userConsent.acceptedVendors
+            dict["acceptedCategories"] = userConsent.acceptedCategories
+            dict["legIntCategories"] = userConsent.legitimateInterestCategories
+            dict["specialFeatures"] = userConsent.specialFeatures
+            channel.invokeMethod("onConsentReady", arguments: dict)
         }
 
         func onError(error: GDPRConsentViewControllerError?) {
