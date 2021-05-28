@@ -10,7 +10,7 @@ import ConsentViewController
 class SourcepointCmp : SwiftSourcepointCmpPlugin{
     private let channel: FlutterMethodChannel!
     private var cvc: GDPRConsentViewController!
-    
+
     public init(with _: FlutterPluginRegistrar, channel: FlutterMethodChannel) {
         self.channel = channel
         super.init()
@@ -19,8 +19,8 @@ class SourcepointCmp : SwiftSourcepointCmpPlugin{
             self.handle(call, result: result)
         })
     }
-    
-    
+
+
     private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "load":
@@ -31,9 +31,9 @@ class SourcepointCmp : SwiftSourcepointCmpPlugin{
             result(FlutterMethodNotImplemented)
         }
     }
-    
+
     private func load(_ call: FlutterMethodCall, result:@escaping FlutterResult){
-        
+
         let argument = call.arguments as! Dictionary<String, Any>
         let accountId = argument["accountId"] as? Int ?? 22
         let propertyId = argument["propertyId"] as? Int ?? 7639
@@ -50,7 +50,7 @@ class SourcepointCmp : SwiftSourcepointCmpPlugin{
             )
         cvc.loadMessage();
     }
-    
+
     private func showPM(_: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let cvc = cvc else {
             result(FlutterError(code: "program_error", message: "Please call load() method first.", details: nil))
@@ -71,7 +71,7 @@ extension SourcepointCmp: GDPRConsentDelegate {
             UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             channel.invokeMethod("onConsentUIFinished", arguments: nil)
         }
-    
+
         func onAction(_ action: GDPRAction) {
             var dict: [String: String] = [:]
             if (action.id != nil) {
