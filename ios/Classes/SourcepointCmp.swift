@@ -38,7 +38,7 @@ class SourcepointCmp : SwiftSourcepointCmpPlugin{
         let accountId = argument["accountId"] as? Int ?? 22
         let propertyId = argument["propertyId"] as? Int ?? 7639
         let propertyName = argument["propertyName"] as? String ?? "tcfv2.mobile.webview"
-        let PMId = argument["PMId"] as? String ?? "122058"
+        let PMId = argument["pmId"] as? String ?? "122058"
 
         cvc = GDPRConsentViewController(
                 accountId: accountId,
