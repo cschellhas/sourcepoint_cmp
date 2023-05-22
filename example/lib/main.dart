@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  SourcepointCmp _sourcepointCmp;
+  late final SourcepointCmp _sourcepointCmp;
 
   @override
   void initState() {
@@ -29,11 +29,11 @@ class _MyAppState extends State<MyApp> {
         onConsentUIFinished: () {
           debugPrint('onConsentUIFinished');
         },
-        onConsentReady: ({GDPRUserConsent consent}) {
-          debugPrint('Consent string: ${consent.consentString}');
+        onConsentReady: ({GDPRUserConsent? consent}) {
+          debugPrint('Consent string: ${consent?.consentString}');
           debugPrint('Consent action is taken and returned to Sourcepoint');
         },
-        onAction: (ActionType action) {
+        onAction: (ActionType? action) {
           debugPrint('onAction(${action.toString()})');
         },
         onError: (errorCode) {
@@ -54,13 +54,7 @@ class _MyAppState extends State<MyApp> {
           body: Column(
             children: [
               Center(
-                child: FlatButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.blueAccent,
+                child: TextButton(
                   onPressed: () {
                     _sourcepointCmp.showPM();
                   },

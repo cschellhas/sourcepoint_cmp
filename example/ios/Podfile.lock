@@ -1,8 +1,8 @@
 PODS:
-  - ConsentViewController (5.2.8)
+  - ConsentViewController (5.3.6)
   - Flutter (1.0.0)
   - sourcepoint_cmp (0.0.1):
-    - ConsentViewController
+    - ConsentViewController (= 5.3.6)
     - Flutter
 
 DEPENDENCIES:
@@ -20,10 +20,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sourcepoint_cmp/ios"
 
 SPEC CHECKSUMS:
-  ConsentViewController: 3a3c60dfddbb441aa11521579f49d0ee5666ff10
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  sourcepoint_cmp: 18766e0f686845eb388eb02290ad3ba2de3c7d83
+  ConsentViewController: 7b4a44c1d19687fee1e423d59b175e1858017c3e
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  sourcepoint_cmp: 47d587377d1958d5e2dee3cbcdc18eb4f509145a
 
-PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
+PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.12.0

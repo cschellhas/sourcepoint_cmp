@@ -25,7 +25,7 @@ class SourcepointCmp {
   final String pmId;
 
   /// called after an action is taken by the user and the consent info is returned by SourcePoint's endpoints
-  final void Function({GDPRUserConsent consent})? onConsentReady;
+  final void Function({GDPRUserConsent? consent})? onConsentReady;
 
   /// called on Sourcepoint errors
   final void Function(String? errorMessage)? onError;
@@ -49,11 +49,11 @@ class SourcepointCmp {
     this.onError,
     this.onAction
   }) {
-    _channel.setMethodCallHandler(_handleEvent as Future<dynamic> Function(MethodCall)?);
+    _channel.setMethodCallHandler(_handleEvent);
   }
 
   /// Handles returned events
-  Future<dynamic>? _handleEvent(MethodCall call) {
+  Future<void> _handleEvent(MethodCall call) async {
     switch (call.method) {
       case 'onConsentUIReady':
         this.onConsentUIReady!();
@@ -81,7 +81,6 @@ class SourcepointCmp {
         this.onError!(debugDescription);
         break;
     }
-    return null;
   }
 
   List<String> _castDynamicList(List<dynamic>? list) {
