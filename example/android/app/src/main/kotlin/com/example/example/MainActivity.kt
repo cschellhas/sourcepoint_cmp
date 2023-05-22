@@ -1,4 +1,4 @@
-package de.medienkontorfulda.sourcepoint_cmp_example
+package com.example.example
 
 import io.flutter.embedding.android.FlutterActivity
 
